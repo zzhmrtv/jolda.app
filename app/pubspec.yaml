@@ -1,6 +1,8 @@
-name: jolda
-description: JOLDA Flutter App
+name: jolda_app
+description: JOLDA mobile application
 publish_to: "none"
+
+version: 1.0.0+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -9,5 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
 
+  webview_flutter: ^4.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/web/register.html
