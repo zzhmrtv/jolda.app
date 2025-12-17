@@ -2,14 +2,16 @@ name: Flutter Web Deploy
 
 on:
   push:
-    branches: [ "main" ]
-
-permissions:
-  contents: write
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: app
 
     steps:
       - uses: actions/checkout@v4
@@ -18,14 +20,10 @@ jobs:
         with:
           channel: stable
 
-      - name: Build Flutter Web
-        run: |
-          cd app
-          flutter pub get
-          flutter build web --release
+      - run: flutter pub get
+      - run: flutter build web --release
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: app/build/web
