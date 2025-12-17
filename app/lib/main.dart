@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'screens/register_screen.dart';
+import 'register_screen.dart';
 
 void main() {
-  runApp(const JoldaApp());
+  runApp(const MyApp());
 }
 
-class JoldaApp extends StatelessWidget {
-  const JoldaApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
