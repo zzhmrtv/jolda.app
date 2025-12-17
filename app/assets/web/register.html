@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>JOLDA</title>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: #0f172a;
+  overflow: hidden;
+}
+
+.screen {
+  padding: 32px 24px 40px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  animation: enter .45s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes enter {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logo {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .35em;
+  color: #2563eb;
+  margin-bottom: 48px;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+p {
+  font-size: 17px;
+  color: #475569;
+  margin-bottom: 28px;
+  max-width: 320px;
+}
+
+.google {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider span {
+  margin: 0 12px;
+}
+
+.field {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 17px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 14px;
+  outline: none;
+}
+
+.field:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+}
+
+button {
+  margin-top: auto;
+  width: 100%;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+button:active {
+  transform: scale(.98);
+  box-shadow: 0 6px 18px rgba(37,99,235,.35);
+}
+
+.footer {
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen">
+
+  <div class="logo">JOLDA</div>
+
+  <h1>Создай аккаунт</h1>
+  <p>Войди через Google или создай аккаунт вручную</p>
+
+  <!-- GOOGLE -->
+  <div
+    id="g_id_onload"
+    data-client_id="PASTE_GOOGLE_CLIENT_ID"
+    data-callback="onGoogle"
+    data-auto_prompt="false">
+  </div>
+
+  <div class="google" id="googleBtn"></div>
+
+  <div class="divider"><span>или</span></div>
+
+  <!-- FORM -->
+  <input class="field" placeholder="Имя" id="name">
+  <input class="field" placeholder="Email" type="email" id="email">
+  <input class="field" placeholder="Пароль" type="password" id="password">
+
+  <button onclick="submit()">Продолжить</button>
+
+  <div class="footer">Без спама · Можно изменить позже</div>
+</div>
+
+<script>
+window.onload = () => {
+  google.accounts.id.renderButton(
+    document.getElementById("googleBtn"),
+    { theme: "outline", size: "large", shape: "pill", width: 280 }
+  );
+};
+
+function onGoogle(response) {
+  sendToFlutter({ provider: "google", token: response.credential });
+}
+
+function submit() {
+  sendToFlutter({
+    provider: "email",
+    name: name.value,
+    email: email.value,
+    password: password.value
+  });
+}
+
+function sendToFlutter(data) {
+  if (window.flutter_inappwebview) {
+    window.flutter_inappwebview.callHandler("register", data);
+  } else {
+    console.log(data);
+  }
+}
+</script>
+
+</body>
+</html>
